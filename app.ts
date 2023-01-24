@@ -2,11 +2,11 @@ const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
 const cors = require('cors');
+require("dotenv").config();
 
 const AdminJS = require('adminjs');
 const AdminJSExpress = require('@adminjs/express');
 const AdminJSMongoose = require("@adminjs/mongoose");
-const adminConfig = require("./app/config/admin");
 
 const {Role} = require("./app/models/role.model");
 const {User} = require("./app/models/user.model");
@@ -23,7 +23,7 @@ const buildingImageRoutes = require('./app/routes/building.image.routes');
 const apartmentRoutes = require('./app/routes/apartment.routes');
 const apartmentImageRoutes = require('./app/routes/apartment.image.routes');
 
-import { Request, Response, NextFunction } from 'express';
+import {NextFunction, Request, Response} from 'express';
 
 AdminJS.registerAdapter(AdminJSMongoose);
 
@@ -39,11 +39,11 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use('/api', cityRoutes );
-app.use('/api', buildingRoutes );
-app.use('/api', buildingImageRoutes );
-app.use('/api', apartmentRoutes );
-app.use('/api', apartmentImageRoutes );
+app.use('/api', cityRoutes);
+app.use('/api', buildingRoutes);
+app.use('/api', buildingImageRoutes);
+app.use('/api', apartmentRoutes);
+app.use('/api', apartmentImageRoutes);
 
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
@@ -51,23 +51,23 @@ require('./app/routes/user.routes')(app);
 const PORT = 5000;
 
 app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Welcome to m2 application." });
+  res.json({message: "Welcome to m2 application."});
 });
 
 const authenticate = async (email: string, password: any) => {
-  if (email === adminConfig.DEFAULT_ADMIN.email && password === adminConfig.DEFAULT_ADMIN.password) {
-    return Promise.resolve(adminConfig.DEFAULT_ADMIN);
+  if (email === process.env.EMAIL && password === process.env.PASSWORD) {
+    return Promise.resolve({email: process.env.EMAIL, password: process.env.PASSWORD});
   };
   return null;
 }
 
 async function start() {
   const adminJs = new AdminJS({
-    resources:[
-      Apartment,Building,City,BuildingImage,User,Role,ApartmentImage,RefreshToken
+    resources: [
+      City, Building, BuildingImage, Apartment, ApartmentImage, User, Role, RefreshToken
     ],
     rootPath: "/admin",
-    });
+  });
   const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
     adminJs,
     {
@@ -91,18 +91,18 @@ async function start() {
   const router = AdminJSExpress.buildRouter(adminJs, adminRouter);
   app.use(adminJs.options.rootPath, router);
   try {
-    await mongoose.connect("mongodb+srv://Daulet:qazaqway@cluster0.rhykf.mongodb.net/?retryWrites=true&w=majority", {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
       .then(() => {
-          console.log("Successfully connect to MongoDB.");
-          initial();
-        })
+        console.log("Successfully connect to MongoDB.");
+        initial();
+      })
       .catch((err: any) => {
-          console.error("Connection error", err);
-          process.exit();
-        });
+        console.error("Connection error", err);
+        process.exit();
+      });
     app.listen(PORT, () => console.log(`AdminJS started on http://localhost:${PORT}${adminJs.options.rootPath}`))
   } catch (e: any) {
     console.log(`server error ${e.message}`)
@@ -125,7 +125,7 @@ function initial() {
 
       new Role({
         name: "moderator"
-      }).save((err: any)  => {
+      }).save((err: any) => {
         if (err) {
           console.log("error", err);
         }
@@ -135,7 +135,7 @@ function initial() {
 
       new Role({
         name: "admin"
-      }).save((err: any)  => {
+      }).save((err: any) => {
         if (err) {
           console.log("error", err);
         }

@@ -3,7 +3,8 @@ import { Request, Response} from 'express';
 
 exports.getApartment= async (req: Request, res: Response) => {
   if(req.query["name"]){
-    const apartment = await model.Apartment.find({"name": new RegExp(req.body.name, "i")}).sort({"name": 1});
+    const regEx: any = req.query["name"]
+    const apartment = await model.Apartment.find({"name": new RegExp(regEx, "i")}).sort({"name": 1});
     res.send(apartment);
   } else {
     const apartment = await model.Apartment.find();

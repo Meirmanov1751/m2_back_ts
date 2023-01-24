@@ -9,7 +9,7 @@ const BuildingSchema = new Schema<IBuilding>({
   cityId: {type: Types.ObjectId, ref: "City"},
   totalArea: Number,
   decription: String,
-});
+},{ timestamps: true });
 
 exports.Building = model<IBuilding>('Building', BuildingSchema);
 

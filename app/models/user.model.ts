@@ -13,7 +13,7 @@ const UserSchema = new Schema<IUser>({
       ref: "Role"
     }
   ]
-});
+},{ timestamps: true });
 
 exports.User = model<IUser>('User', UserSchema);
 

@@ -21,7 +21,7 @@ const verifyToken = (req: any, res: Response, next: NextFunction) => {
     return res.status(403).send({ message: "No token provided!" });
   }
 
-  jwt.verify(token, config.secret, (err: Error, decoded: any) => {
+  jwt.verify(token, process.env.SECRET, (err: Error, decoded: any) => {
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }

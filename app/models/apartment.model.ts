@@ -6,7 +6,8 @@ const ApartmentSchema = new Schema<IApartment>({
   area: Number,
   soldArea: Number,
   building: {type: Types.ObjectId, ref: "Building"},
-});
+},{ timestamps: true }
+);
 
 exports.Apartment = model<IApartment>('Apartment', ApartmentSchema);
 

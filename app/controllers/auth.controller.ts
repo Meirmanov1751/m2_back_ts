@@ -1,4 +1,5 @@
-const config = require("../config/auth.config");
+require("dotenv").config()
+const config = require("../config/auth.config")
 const User = require("../models/user.model");
 const Role = require("../models/role.model");
 const RefreshToken = require("../models/refreshToken.model")
@@ -93,7 +94,7 @@ exports.signin = (req: Request, res: Response) => {
         });
       }
 
-      let token = jwt.sign({ id: user.id }, config.secret, {
+      let token = jwt.sign({ id: user.id }, process.env.SECRET, {
         expiresIn: config.jwtExpiration,
       });
 
@@ -139,7 +140,7 @@ exports.refreshToken = async (req: Request, res: Response) => {
       return;
     }
 
-    let newAccessToken = jwt.sign({ id: refreshToken.user._id }, config.secret, {
+    let newAccessToken = jwt.sign({ id: refreshToken.user._id }, process.env.SECRET, {
       expiresIn: config.jwtExpiration,
     });
 
@@ -155,7 +156,7 @@ exports.refreshToken = async (req: Request, res: Response) => {
 exports.logout = async (req: Request, res: Response) => {
   const token = req.headers.authorization;
   try{
-    var decode = jwt.verify(token, config.secret);
+    var decode = jwt.verify(token, process.env.SECRET);
     const user = await User.findOne({token});
     if(!user) {
       res.status(401).json({message: 'Invalid token'});
