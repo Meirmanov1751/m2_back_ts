@@ -91,20 +91,23 @@ async function start() {
   const router = AdminJSExpress.buildRouter(adminJs, adminRouter);
   app.use(adminJs.options.rootPath, router);
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    })
-      .then(() => {
-        console.log("Successfully connect to MongoDB.");
-        initial();
+    if (process.env.NODE_ENV !== 'test') {
+      await mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
       })
-      .catch((err: any) => {
-        console.error("Connection error", err);
-        process.exit();
-      });
-    app.listen(PORT, () => console.log(`AdminJS started on http://localhost:${PORT}${adminJs.options.rootPath}`))
-  } catch (e: any) {
+        .then(() => {
+          console.log("Successfully connect to MongoDB.");
+          initial();
+        })
+        .catch((err: any) => {
+          console.error("Connection error", err);
+          process.exit();
+        });
+
+        app.listen(PORT, () => console.log(`AdminJS started on http://localhost:${PORT}${adminJs.options.rootPath}`))
+      }
+    } catch (e: any) {
     console.log(`server error ${e.message}`)
     process.exit(1)
   };
