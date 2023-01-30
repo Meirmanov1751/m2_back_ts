@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_DATABASE=auth
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    networks:
+      - mongo-compose-network
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
+
+  redis:
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - 6379:6379
+    volumes:
+      - .redisdb:/data
+    restart: always
+    entrypoint: redis-server --appendonly yes
+
+  app:
+    build: ./
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - mongo-compose-network
+    links:
+      - redis
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./m2_back
+    ports:
+      - '5000:5000'
+
+networks:
+  mongo-compose-network:
+    driver: bridge
