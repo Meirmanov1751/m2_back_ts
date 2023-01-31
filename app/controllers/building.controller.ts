@@ -1,6 +1,5 @@
 const model = require("../models/building.model");
 import { Request, Response} from 'express';
-const redisClient = require('../config/redis');
 
 exports.getBuilding = async (req: Request, res: Response) => {
   if(req.query["name"]){
@@ -9,8 +8,6 @@ exports.getBuilding = async (req: Request, res: Response) => {
     res.send(building);
   } else {
     const building = await model.Building.find();
-    const buildredis = await redisClient.setAsync(building)
-    console.log(buildredis)
     res.send(building);
   };
 };
