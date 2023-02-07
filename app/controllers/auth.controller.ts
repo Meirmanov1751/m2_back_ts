@@ -1,21 +1,22 @@
 require("dotenv").config()
 const config = require("../config/auth.config")
-const User = require("../models/user.model");
-const Role = require("../models/role.model");
+const {User} = require("../models/user.model");
+const {Role} = require("../models/role.model");
 const RefreshToken = require("../models/refreshToken.model")
 
 import {NextFunction, Request, Response} from 'express';
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req: Request, res: Response) => {
+export const signup = (req: Request, res: Response) => {
   console.log(req.body)
   const user = new User({
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
     iin: req.body.email,
-    avatar: req.body.email,
+    fullname: req.body.fullname,
+    // avatar: req.body.email,
   });
 
   user.save((err: Error, user: any) => {
@@ -67,7 +68,7 @@ exports.signup = (req: Request, res: Response) => {
   });
 };
 
-exports.signin = (req: Request, res: Response) => {
+export const signin = (req: Request, res: Response) => {
   User.findOne({
     username: req.body.username,
   })

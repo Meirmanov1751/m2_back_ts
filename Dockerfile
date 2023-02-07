@@ -1,13 +1,13 @@
 FROM node:16
 
-WORKDIR ./m2_back
+WORKDIR /app
 
 COPY package*.json .
 
 RUN npm install
 
-COPY . .
+COPY . /app
 
-RUN npm run build
+#RUN npm run build
 
 CMD npm start

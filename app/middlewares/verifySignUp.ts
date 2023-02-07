@@ -1,5 +1,5 @@
-const User = require("./../models/user.model")
-const Role = require("./../models/role.model")
+const {User} = require("./../models/user.model")
+const {Role} = require("./../models/role.model")
 
 const checkDuplicateUsernameOrEmail = (req: any, res: any, next: any) => {
   // Username
@@ -50,7 +50,7 @@ const checkRolesExisted = (req: any, res: any, next: any) => {
   next();
 };
 
-exports.verifySignUp = {
+export {
   checkDuplicateUsernameOrEmail,
   checkRolesExisted
 };
