@@ -22,8 +22,8 @@ services:
     networks:
       - mongo-compose-network
     environment:
-      NODE_ENV: production
-      REDIS_URL: redis://redis:6379
+      EMAIL: "dau.kassymov@aues.kz"
+      PASSWORD: "qazaqway"
     volumes:
       - ./m2_back
     ports:
