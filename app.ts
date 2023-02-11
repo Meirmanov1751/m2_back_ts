@@ -35,6 +35,7 @@ const options = {
   autoClean: true
 };
 
+
 app.use(formData.parse(options));
 // delete from the request all empty files (size == 0)
 app.use(formData.format());
@@ -53,7 +54,6 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
-
 
 
 app.use('/api', cityRoutes);
@@ -95,7 +95,10 @@ watcher.on('ready', function() {
 async function start() {
   const adminJs = new AdminJS({
     resources: [
-      City, Building, BuildingImage, Apartment, ApartmentImage, User, Role, RefreshToken
+      City, Building, BuildingImage, Apartment, ApartmentImage,
+      User,
+      Role,
+      RefreshToken
     ],
     rootPath: "/admin",
   });

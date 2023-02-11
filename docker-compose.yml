@@ -22,8 +22,13 @@ services:
     networks:
       - mongo-compose-network
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
       REDIS_URL: redis://redis:6379
+      MONGODB_URI: mongodb://admin:pass@mongodb:27017/?authSource=admin
+      EMAIL: dau.kassymov@aues.kz
+      PASSWORD: qazaqway
+      SECRET: meirmanov-secret-key
+
     volumes:
       - .:/app
     ports:

@@ -37,7 +37,7 @@ RefreshTokenSchema.statics.createToken = async function (user) {
 RefreshTokenSchema.statics.verifyExpiration = (token) => {
   return token.expiryDate.getTime() < new Date().getTime();
 }
-
-export default model<IRefreshtokenInterface>("RefreshToken", RefreshTokenSchema);
+const RefreshToken = model<IRefreshtokenInterface>("RefreshToken", RefreshTokenSchema);
+export {RefreshToken}
 
 
