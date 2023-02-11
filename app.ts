@@ -1,3 +1,5 @@
+import * as path from "path";
+
 const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
@@ -11,9 +13,9 @@ const AdminJSMongoose = require("@adminjs/mongoose");
 const {Role} = require("./app/models/role.model");
 const {User} = require("./app/models/user.model");
 const {Building} = require("./app/models/building.model");
-const {BuildingImage} = require("./app/models/building.image.model");
+const {BuildingImages} = require("./app/resources/building.files");
 const {Apartment} = require("./app/models/apartment.model")
-const {ApartmentImage} = require("./app/models/apartment.image.model")
+const {ApartmentImages} = require("./app/resources/apartment.files")
 const {City} = require("./app/models/city.model");
 const {RefreshToken} = require("./app/models/refreshToken.model");
 
@@ -26,6 +28,7 @@ const apartmentImageRoutes = require('./app/routes/apartment.image.routes');
 import {NextFunction, Request, Response} from 'express';
 
 AdminJS.registerAdapter(AdminJSMongoose);
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json())
 
@@ -64,7 +67,7 @@ const authenticate = async (email: string, password: any) => {
 async function start() {
   const adminJs = new AdminJS({
     resources: [
-      City, Building, BuildingImage, Apartment, ApartmentImage, User, Role, RefreshToken
+      City, Building, BuildingImages, Apartment, User, Role, RefreshToken, ApartmentImages
     ],
     rootPath: "/admin",
   });
