@@ -1,6 +1,6 @@
-export interface IBuildingImage {
+export interface INewsImage {
   id: number;
-  buildingId: any;
+  NewsId: any;
   s3Key: string;
   bucket: string;
   mime: string;

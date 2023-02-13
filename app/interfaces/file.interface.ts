@@ -1,6 +1,5 @@
-export interface IBuildingImage {
+export interface File {
   id: number;
-  buildingId: any;
   s3Key: string;
   bucket: string;
   mime: string;

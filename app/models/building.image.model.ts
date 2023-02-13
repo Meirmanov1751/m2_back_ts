@@ -3,7 +3,10 @@ import {IBuildingImage} from "../interfaces/building.image.interface";
 
 const BuildingImageSchema = new Schema<IBuildingImage>({
   buildingId: {type: Types.ObjectId, ref: "Building"},
-  image: String,
+  s3Key: String,
+  bucket: String,
+  mime: String,
+  comment: String,
 },{ timestamps: true });
 
 exports.BuildingImage = model<IBuildingImage>('BuildingImage', BuildingImageSchema);

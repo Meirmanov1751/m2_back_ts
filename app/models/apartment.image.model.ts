@@ -3,7 +3,10 @@ import {IApartmentImage} from "../interfaces/apartment.image.interface";
 
 const ApartmentImageSchema = new Schema<IApartmentImage>({
   apartmentId: {type: Types.ObjectId, ref: "Apartment"},
-  image: String,
+  s3Key: String,
+  bucket: String,
+  mime: String,
+  comment: String,
 },{ timestamps: true });
 
 exports.ApartmentImage = model<IApartmentImage>('ApartmentImage', ApartmentImageSchema);

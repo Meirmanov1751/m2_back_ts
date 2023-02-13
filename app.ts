@@ -1,3 +1,6 @@
+import * as path from "path";
+const {NextFunction, Request, Response} = require('express';
+
 const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
@@ -13,21 +16,25 @@ const AdminJSMongoose = require("@adminjs/mongoose");
 const {Role} = require("./app/models/role.model");
 const {User} = require("./app/models/user.model");
 const {Building} = require("./app/models/building.model");
-const {BuildingImage} = require("./app/models/building.image.model");
 const {Apartment} = require("./app/models/apartment.model")
-const {ApartmentImage} = require("./app/models/apartment.image.model")
 const {City} = require("./app/models/city.model");
+const {News} = require("./app/models/news.model");
 const {RefreshToken} = require("./app/models/refreshToken.model");
 
+const {ApartmentImages} = require("./app/resources/apartment.files");
+const {BuildingImages} = require("./app/resources/building.files");
+const {NewsImages} = require("./app/resources/news.files");
+
 const cityRoutes = require('./app/routes/city.routes');
+const newsRoutes = require('./app/routes/news.routes');
+const newsImageRoutes = require('./app/routes/news.image.routes');
 const buildingRoutes = require('./app/routes/building.routes');
 const buildingImageRoutes = require('./app/routes/building.image.routes');
 const apartmentRoutes = require('./app/routes/apartment.routes');
 const apartmentImageRoutes = require('./app/routes/apartment.image.routes');
 
-import {NextFunction, Request, Response} from 'express';
-
 AdminJS.registerAdapter(AdminJSMongoose);
+app.use(express.static(path.join(__dirname, './public')));
 
 
 const options = {
@@ -55,8 +62,9 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-
 app.use('/api', cityRoutes);
+app.use('/api', newsRoutes);
+app.use('/api', newsImageRoutes);
 app.use('/api', buildingRoutes);
 app.use('/api', buildingImageRoutes);
 app.use('/api', apartmentRoutes);
@@ -78,27 +86,24 @@ const authenticate = async (email: string, password: any) => {
   return null;
 }
 
-
-
-const chokidar = require('chokidar')
-const watcher = chokidar.watch('./app')
-watcher.on('ready', function() {
-  watcher.on('all', function() {
-    console.log("Clearing /dist/ module cache from server")
-    Object.keys(require.cache).forEach(function(id) {
-      if (/[\/\\]app[\/\\]/.test(id)) delete require.cache[id]
-    })
-  })
-})
-
-
 async function start() {
   const adminJs = new AdminJS({
     resources: [
-      City, Building, BuildingImage, Apartment, ApartmentImage,
-      User,
-      Role,
-      RefreshToken
+      City, Building, BuildingImages, Apartment, ApartmentImages, User, Role, RefreshToken, {
+        resource: News, options: {
+          properties: {
+            content: {
+              type: 'richtext',
+              isVisible: {list: false, filter: false, show: true, edit: true},
+              custom: {
+                modules: {
+                  toolbar: [['bold', 'italic'], ['link', 'image']],
+                },
+              },
+            }
+          },
+        },
+      },NewsImages
     ],
     rootPath: "/admin",
   });

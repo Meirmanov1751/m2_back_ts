@@ -20,6 +20,7 @@
   "dependencies": {
     "@adminjs/express": "^5.0.1",
     "@adminjs/mongoose": "^3.0.1",
+    "@adminjs/upload": "^3.0.1",
     "@babel/plugin-transform-modules-commonjs": "^7.20.11",
     "@tiptap/starter-kit": "^2.0.0-beta.189",
     "adminjs": "^6.7.5",
@@ -39,7 +40,8 @@
     "pug": "^3.0.2",
     "redis": "^4.6.2",
     "ts-jest": "^29.0.5",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typeorm": "^0.3.12"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.1.6",
