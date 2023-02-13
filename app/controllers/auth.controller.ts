@@ -2,7 +2,7 @@ require("dotenv").config()
 const config = require("../config/auth.config")
 const {User} = require("../models/user.model");
 const {Role} = require("../models/role.model");
-const RefreshToken = require("../models/refreshToken.model")
+const {RefreshToken} = require("../models/refreshToken.model")
 
 import {NextFunction, Request, Response} from 'express';
 var jwt = require("jsonwebtoken");
