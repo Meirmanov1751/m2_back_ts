@@ -1,5 +1,5 @@
 import * as path from "path";
-const {NextFunction, Request, Response} = require('express';
+import {NextFunction, Request, Response} from 'express';
 
 const express = require('express');
 const mongoose = require("mongoose");
@@ -37,22 +37,8 @@ AdminJS.registerAdapter(AdminJSMongoose);
 app.use(express.static(path.join(__dirname, './public')));
 
 
-const options = {
-  uploadDir: os.tmpdir(),
-  autoClean: true
-};
-
-
-app.use(formData.parse(options));
-// delete from the request all empty files (size == 0)
-app.use(formData.format());
-// change the file objects to fs.ReadStream
-app.use(formData.stream());
-// union the body and the files
-app.use(formData.union());
-
 app.use(cors());
-app.use(express.json())
+// app.use(express.json())
 
 app.use(function (req: Request, res: Response, next: NextFunction) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -120,7 +106,7 @@ async function start() {
       saveUninitialized: true,
       secret: 'sessionsecret',
       cookie: {
-        httpOnly: process.env.NODE_ENV === 'production',
+        httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       },
       name: 'adminjs',
@@ -183,7 +169,23 @@ function initial() {
       });
     }
   });
+//
+//   const options = {
+//     uploadDir: os.tmpdir(),
+//     autoClean: true
+//   };
+//
+//
+//   app.use(formData.parse(options));
+// // delete from the request all empty files (size == 0)
+//   app.use(formData.format());
+// // change the file objects to fs.ReadStream
+//   app.use(formData.stream());
+// // union the body and the files
+//   app.use(formData.union());
+
 };
+
 
 start()
 

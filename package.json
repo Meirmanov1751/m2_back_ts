@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon app.ts",
+    "start": "NODE_ENV=developement nodemon app.ts",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles --testTimeout=5000",
     "build": "tsc"
   },
@@ -18,12 +18,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@adminjs/express": "^5.0.1",
+    "@adminjs/express": "^5.1.0",
     "@adminjs/mongoose": "^3.0.1",
     "@adminjs/upload": "^3.0.1",
     "@babel/plugin-transform-modules-commonjs": "^7.20.11",
     "@tiptap/starter-kit": "^2.0.0-beta.189",
-    "adminjs": "^6.7.5",
+    "adminjs": "^6.8.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
     "chokidar": "^3.5.3",
