@@ -5,6 +5,8 @@ const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
 const cors = require('cors');
+const formData = require("express-form-data");
+const os = require("os");
 require("dotenv").config();
 
 const AdminJS = require('adminjs');
@@ -34,9 +36,22 @@ const apartmentImageRoutes = require('./app/routes/apartment.image.routes');
 AdminJS.registerAdapter(AdminJSMongoose);
 app.use(express.static(path.join(__dirname, './public')));
 
-app.use(express.json())
+
+const options = {
+  uploadDir: os.tmpdir(),
+  autoClean: true
+};
+
+app.use(formData.parse(options));
+// delete from the request all empty files (size == 0)
+app.use(formData.format());
+// change the file objects to fs.ReadStream
+app.use(formData.stream());
+// union the body and the files
+app.use(formData.union());
 
 app.use(cors());
+app.use(express.json())
 
 app.use(function (req: Request, res: Response, next: NextFunction) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -45,6 +60,8 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
+
+
 
 app.use('/api', cityRoutes);
 app.use('/api', newsRoutes);
@@ -57,7 +74,7 @@ app.use('/api', apartmentImageRoutes);
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 
-const PORT = 5000;
+const PORT = 8000;
 
 app.get("/", (req: Request, res: Response) => {
   res.json({message: "Welcome to m2 application."});
@@ -70,6 +87,20 @@ const authenticate = async (email: string, password: any) => {
   ;
   return null;
 }
+
+
+
+const chokidar = require('chokidar')
+const watcher = chokidar.watch('./app')
+watcher.on('ready', function() {
+  watcher.on('all', function() {
+    console.log("Clearing /dist/ module cache from server")
+    Object.keys(require.cache).forEach(function(id) {
+      if (/[\/\\]app[\/\\]/.test(id)) delete require.cache[id]
+    })
+  })
+})
+
 
 async function start() {
   const adminJs = new AdminJS({

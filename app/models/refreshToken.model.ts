@@ -38,6 +38,6 @@ RefreshTokenSchema.statics.verifyExpiration = (token) => {
   return token.expiryDate.getTime() < new Date().getTime();
 }
 
-exports.RefreshToken = model<IRefreshtokenInterface>("RefreshToken", RefreshTokenSchema);
+export default model<IRefreshtokenInterface>("RefreshToken", RefreshTokenSchema);
 
 

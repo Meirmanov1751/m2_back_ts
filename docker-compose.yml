@@ -16,7 +16,7 @@ services:
       - ./data:/data/db
 
   app:
-    build: ./
+    build: .
     depends_on:
       - mongodb
     networks:
@@ -25,9 +25,9 @@ services:
       EMAIL: "dau.kassymov@aues.kz"
       PASSWORD: "qazaqway"
     volumes:
-      - ./m2_back
+      - .:/app
     ports:
-      - '5000:5000'
+      - '8000:8000'
 
 networks:
   mongo-compose-network:
