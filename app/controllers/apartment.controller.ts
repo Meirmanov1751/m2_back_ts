@@ -8,6 +8,7 @@ exports.getApartment= async (req: Request, res: Response) => {
     res.send(apartment);
   } else {
     const apartment = await model.Apartment.find();
+    console.log(apartment)
     res.send(apartment);
   };
 };

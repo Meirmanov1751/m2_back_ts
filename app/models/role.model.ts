@@ -4,4 +4,5 @@ import {IRole} from "../interfaces/role.interface";
 const RoleSchema = new Schema<IRole>({
   name: String,
 },{ timestamps: true });
-export const Role = model<IRole>('Role', RoleSchema);
+
+exports.Role = model<IRole>('Role', RoleSchema);

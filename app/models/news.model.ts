@@ -3,6 +3,7 @@ import {INews} from "../interfaces/news.interface";
 
 const NewsSchema = new Schema<INews>({
   title: String,
+  shortDescription: String,
   content: String
 },{ timestamps: true });
 

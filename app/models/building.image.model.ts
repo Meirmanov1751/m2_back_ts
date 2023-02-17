@@ -9,4 +9,5 @@ const BuildingImageSchema = new Schema<IBuildingImage>({
   comment: String,
 },{ timestamps: true });
 
+exports.BuildingImageSchema
 exports.BuildingImage = model<IBuildingImage>('BuildingImage', BuildingImageSchema);

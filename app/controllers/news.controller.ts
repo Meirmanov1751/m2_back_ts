@@ -2,13 +2,25 @@ const model = require("../models/news.model");
 import { Request, Response} from 'express';
 
 exports.getNews = async (req: Request, res: Response) => {
+  const page: any = req.query.page;
+  const limit: any = req.query.limit;
+
+  const pageOptions = {
+    page: parseInt( page, 9) || 0,
+    limit: parseInt( limit, 10) || 10
+  }
+
   if(req.query["name"]){
     const regEx: any = req.query["name"]
     const building = await model.News.find({"name": new RegExp(regEx, "i")}).sort({"name": 1});
     res.send(building);
   } else {
-    const building = await model.News.find()
-    res.send(building);
+    await model.News.find().skip(pageOptions.page * pageOptions.limit)
+      .limit(pageOptions.limit)
+      .exec(function (err: any, doc: any) {
+        if(err) { res.status(500).json(err); return; };
+        res.status(200).json(doc);
+      });
   };
 };
 

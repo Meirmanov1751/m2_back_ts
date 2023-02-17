@@ -1,3 +1,5 @@
+const BuildingImage = require("../models/building.image.model");
+
 const model = require("../models/building.model");
 import { Request, Response} from 'express';
 
@@ -7,7 +9,7 @@ exports.getBuilding = async (req: Request, res: Response) => {
     const building = await model.Building.find({"name": new RegExp(regEx, "i")}).sort({"name": 1});
     res.send(building);
   } else {
-    const building = await model.Building.find();
+    const building = await model.Building.find()
     res.send(building);
   };
 };

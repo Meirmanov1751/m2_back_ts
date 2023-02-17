@@ -1,4 +1,5 @@
 export interface INews{
-  title: string,
-  content: any
+  title: string;
+  shortDescription: string;
+  content: any;
 }

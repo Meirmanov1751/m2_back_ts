@@ -3,4 +3,5 @@ export interface IApartment {
   area: number,
   soldArea: number,
   building: any,
+  images: any
 }

@@ -9,4 +9,5 @@ const ApartmentImageSchema = new Schema<IApartmentImage>({
   comment: String,
 },{ timestamps: true });
 
+exports.ApartmentSchema = ApartmentImageSchema;
 exports.ApartmentImage = model<IApartmentImage>('ApartmentImage', ApartmentImageSchema);

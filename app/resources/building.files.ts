@@ -31,7 +31,7 @@ export const BuildingImages = {
   features: [
     uploadFeature({
       provider: {local: localProvider},
-      validation: {mimeTypes: ['image/png', 'application/pdf', 'audio/mpeg']},
+      validation: {mimeTypes: ['image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'image/jpeg', 'image/svg+xml']},
       properties: {
         key: 's3Key',
         file: 'file',
