@@ -13,7 +13,7 @@ import Component5 from '../node_modules/@adminjs/upload/src/features/upload-file
 AdminJS.UserComponents.Component5 = Component5
 import Component6 from '../node_modules/@adminjs/upload/src/features/upload-file/components/edit'
 AdminJS.UserComponents.Component6 = Component6
-import Component7 from '../node_modules/@adminjs/upload/src/features/upload-file/components/list'
+import Component7 from '../node_modules/@adminjs/upload/build/features/upload-file/components/list.jsx'
 AdminJS.UserComponents.Component7 = Component7
 import Component8 from '../node_modules/@adminjs/upload/src/features/upload-file/components/show'
 AdminJS.UserComponents.Component8 = Component8

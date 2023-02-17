@@ -57,7 +57,7 @@ app.use('/api', apartmentImageRoutes);
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 
-const PORT = 5000;
+const PORT = 8000;
 
 app.get("/", (req: Request, res: Response) => {
   res.json({message: "Welcome to m2 application."});
