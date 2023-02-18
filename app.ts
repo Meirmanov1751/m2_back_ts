@@ -1,6 +1,3 @@
-import * as path from "path";
-import {NextFunction, Request, Response} from 'express';
-
 const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
@@ -16,25 +13,21 @@ const AdminJSMongoose = require("@adminjs/mongoose");
 const {Role} = require("./app/models/role.model");
 const {User} = require("./app/models/user.model");
 const {Building} = require("./app/models/building.model");
+const {BuildingImage} = require("./app/models/building.image.model");
 const {Apartment} = require("./app/models/apartment.model")
+const {ApartmentImage} = require("./app/models/apartment.image.model")
 const {City} = require("./app/models/city.model");
-const {News} = require("./app/models/news.model");
 const {RefreshToken} = require("./app/models/refreshToken.model");
 
-const {ApartmentImages} = require("./app/resources/apartment.files");
-const {BuildingImages} = require("./app/resources/building.files");
-const {NewsImages} = require("./app/resources/news.files");
-
 const cityRoutes = require('./app/routes/city.routes');
-const newsRoutes = require('./app/routes/news.routes');
-const newsImageRoutes = require('./app/routes/news.image.routes');
 const buildingRoutes = require('./app/routes/building.routes');
 const buildingImageRoutes = require('./app/routes/building.image.routes');
 const apartmentRoutes = require('./app/routes/apartment.routes');
 const apartmentImageRoutes = require('./app/routes/apartment.image.routes');
 
+import {NextFunction, Request, Response} from 'express';
+
 AdminJS.registerAdapter(AdminJSMongoose);
-app.use(express.static(path.join(__dirname, './public')));
 
 
 const options = {
@@ -42,6 +35,13 @@ const options = {
   autoClean: true
 };
 
+app.use(formData.parse(options));
+// delete from the request all empty files (size == 0)
+app.use(formData.format());
+// change the file objects to fs.ReadStream
+app.use(formData.stream());
+// union the body and the files
+app.use(formData.union());
 
 app.use(cors());
 app.use(express.json())
@@ -57,8 +57,6 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 
 
 app.use('/api', cityRoutes);
-app.use('/api', newsRoutes);
-app.use('/api', newsImageRoutes);
 app.use('/api', buildingRoutes);
 app.use('/api', buildingImageRoutes);
 app.use('/api', apartmentRoutes);
@@ -76,8 +74,7 @@ app.get("/", (req: Request, res: Response) => {
 const authenticate = async (email: string, password: any) => {
   if (email === process.env.EMAIL && password === process.env.PASSWORD) {
     return Promise.resolve({email: process.env.EMAIL, password: process.env.PASSWORD});
-  }
-  ;
+  };
   return null;
 }
 
@@ -98,21 +95,7 @@ watcher.on('ready', function() {
 async function start() {
   const adminJs = new AdminJS({
     resources: [
-      City, Building, BuildingImages, Apartment, ApartmentImages, User, Role, RefreshToken, {
-        resource: News, options: {
-          properties: {
-            content: {
-              type: 'richtext',
-              isVisible: {list: false, filter: false, show: true, edit: true},
-              custom: {
-                modules: {
-                  toolbar: [['bold', 'italic'], ['link', 'image']],
-                },
-              },
-            }
-          },
-        },
-      },NewsImages
+      City, Building, BuildingImage, Apartment, ApartmentImage, User, Role, RefreshToken
     ],
     rootPath: "/admin",
   });
@@ -138,16 +121,6 @@ async function start() {
 // Build and use a router to handle AdminJS routes.
   const router = AdminJSExpress.buildRouter(adminJs, adminRouter);
   app.use(adminJs.options.rootPath, router);
-
-
-  app.use(formData.parse(options));
-// delete from the request all empty files (size == 0)
-  app.use(formData.format());
-// change the file objects to fs.ReadStream
-  app.use(formData.stream());
-// union the body and the files
-  app.use(formData.union());
-
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
@@ -165,8 +138,7 @@ async function start() {
   } catch (e: any) {
     console.log(`server error ${e.message}`)
     process.exit(1)
-  }
-  ;
+  };
 };
 
 function initial() {
