@@ -1,7 +1,14 @@
 import {NextFunction, Request, Response} from 'express';
+import RequestWithUserInterface from "../interfaces/requestWithUser.interface";
+import {User} from "../models/user.model";
 
 exports.allAccess = (req: Request, res: Response) => {
   res.status(200).send("Public Content.");
+};
+
+exports.getMe = async (req: RequestWithUserInterface, res: Response) => {
+  let user = await User.findById(req.userId).exec();
+  return res.status(200).send(user);
 };
 
 exports.userBoard = (req: Request, res: Response) => {

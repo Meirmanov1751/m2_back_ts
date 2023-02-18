@@ -4,13 +4,25 @@ const model = require("../models/building.model");
 import { Request, Response} from 'express';
 
 exports.getBuilding = async (req: Request, res: Response) => {
+  const page: any = req.query.page;
+  const limit: any = req.query.limit;
+
+  const pageOptions = {
+    page: parseInt( page, 9) || 0,
+    limit: parseInt( limit, 10) || 10
+  }
+
   if(req.query["name"]){
     const regEx: any = req.query["name"]
     const building = await model.Building.find({"name": new RegExp(regEx, "i")}).sort({"name": 1});
     res.send(building);
   } else {
-    const building = await model.Building.find()
-    res.send(building);
+    const building = await model.Building.find().skip(pageOptions.page * pageOptions.limit)
+      .limit(pageOptions.limit)
+      .exec(function (err: any, doc: any) {
+        if(err) { res.status(500).json(err); return; };
+        res.status(200).json(doc);
+      });
   };
 };
 

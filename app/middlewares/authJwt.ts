@@ -98,4 +98,3 @@ const authJwt = {
   isModerator
 };
 module.exports = authJwt;
-
