@@ -3,7 +3,7 @@ import uploadFeature from '@adminjs/upload';
 const {BuildingImage} = require("../models/building.image.model");
 
 const localProvider = {
-  bucket: 'public/files/building',
+  bucket: './public/files/building',
   opts: {
     baseUrl: '/files/building',
   },

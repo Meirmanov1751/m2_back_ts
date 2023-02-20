@@ -6,5 +6,4 @@ export interface IBuilding {
   cityId: any,
   totalArea: number,
   decription: string,
-  images: any
 }

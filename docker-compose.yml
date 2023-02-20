@@ -22,8 +22,18 @@ services:
     networks:
       - mongo-compose-network
     environment:
-      NODE_ENV: production
+<<<<<<<<< Temporary merge branch 1
+      NODE_ENV: development
       REDIS_URL: redis://redis:6379
+      MONGODB_URI: mongodb://admin:pass@mongodb:27017/?authSource=admin
+      EMAIL: dau.kassymov@aues.kz
+      PASSWORD: qazaqway
+      SECRET: meirmanov-secret-key
+
+=========
+      EMAIL: "dau.kassymov@aues.kz"
+      PASSWORD: "qazaqway"
+>>>>>>>>> Temporary merge branch 2
     volumes:
       - .:/app
     ports:

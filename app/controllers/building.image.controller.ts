@@ -2,8 +2,14 @@ const model = require("../models/building.image.model");
 import { Request, Response} from 'express';
 
 exports.getBuildingImage = async (req: Request, res: Response) => {
-  const building = await model.BuildingImage.find();
-  res.send(building);
+  if(req.query["building_id"]){
+    const buildingId: any = req.query["building_id"]
+    const building = await model.BuildingImage.find({"buildingId": buildingId}).sort({"isCover": 1});
+    res.send(building);
+  } else {
+    const building = await model.BuildingImage.find();
+    res.send(building);
+  };
 };
 
 exports.postBuildingImage = async (req: Request, res: Response) => {
