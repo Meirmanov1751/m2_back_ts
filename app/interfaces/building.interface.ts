@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 enum BUILDING_TYPES {
   INVESTMENT='investment',
-};
+}
 
-export interface IBuilding extends mongoose.Document{
+export interface IBuilding {
   name: string,
   address: string,
   passDate: Date,
@@ -12,5 +12,5 @@ export interface IBuilding extends mongoose.Document{
   cityId: any,
   type: BUILDING_TYPES,
   totalArea: number,
-  description: string,
+  description: string
 }

@@ -7,6 +7,7 @@ const BuildingImageSchema = new Schema<IBuildingImage>({
   bucket: String,
   mime: String,
   comment: String,
+  isCover: Boolean,
 },{ timestamps: true });
 
 exports.BuildingImage = model<IBuildingImage>('BuildingImage', BuildingImageSchema);

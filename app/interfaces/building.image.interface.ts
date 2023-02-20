@@ -5,4 +5,5 @@ export interface IBuildingImage {
   bucket: string;
   mime: string;
   comment: string | null;
+  isCover: boolean;
 }
