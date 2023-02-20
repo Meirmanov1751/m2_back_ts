@@ -1,3 +1,5 @@
+import * as path from "path";
+
 const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
@@ -17,9 +19,13 @@ const {BuildingImage} = require("./app/models/building.image.model");
 const {Apartment} = require("./app/models/apartment.model")
 const {ApartmentImage} = require("./app/models/apartment.image.model")
 const {City} = require("./app/models/city.model");
+const {News} = require("./app/models/news.model");
+const {NewsImages} = require("./app/resources/news.files");
 const {RefreshToken} = require("./app/models/refreshToken.model");
 
 const cityRoutes = require('./app/routes/city.routes');
+const newsRoutes = require('./app/routes/news.routes');
+const newsImageRoutes = require('./app/routes/news.image.routes');
 const buildingRoutes = require('./app/routes/building.routes');
 const buildingImageRoutes = require('./app/routes/building.image.routes');
 const apartmentRoutes = require('./app/routes/apartment.routes');
@@ -27,21 +33,14 @@ const apartmentImageRoutes = require('./app/routes/apartment.image.routes');
 
 import {NextFunction, Request, Response} from 'express';
 
-AdminJS.registerAdapter(AdminJSMongoose);
 
+AdminJS.registerAdapter(AdminJSMongoose);
+app.use(express.static(path.join(__dirname, './public')));
 
 const options = {
   uploadDir: os.tmpdir(),
   autoClean: true
 };
-
-app.use(formData.parse(options));
-// delete from the request all empty files (size == 0)
-app.use(formData.format());
-// change the file objects to fs.ReadStream
-app.use(formData.stream());
-// union the body and the files
-app.use(formData.union());
 
 app.use(cors());
 app.use(express.json())
@@ -54,8 +53,8 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-
-
+app.use('/api', newsRoutes);
+app.use('/api', newsImageRoutes);
 app.use('/api', cityRoutes);
 app.use('/api', buildingRoutes);
 app.use('/api', buildingImageRoutes);
@@ -74,28 +73,34 @@ app.get("/", (req: Request, res: Response) => {
 const authenticate = async (email: string, password: any) => {
   if (email === process.env.EMAIL && password === process.env.PASSWORD) {
     return Promise.resolve({email: process.env.EMAIL, password: process.env.PASSWORD});
-  };
+  }
+  ;
   return null;
 }
 
-
-
 const chokidar = require('chokidar')
 const watcher = chokidar.watch('./app')
-watcher.on('ready', function() {
-  watcher.on('all', function() {
+watcher.on('ready', function () {
+  watcher.on('all', function () {
     console.log("Clearing /dist/ module cache from server")
-    Object.keys(require.cache).forEach(function(id) {
+    Object.keys(require.cache).forEach(function (id) {
       if (/[\/\\]app[\/\\]/.test(id)) delete require.cache[id]
     })
   })
 })
 
-
 async function start() {
   const adminJs = new AdminJS({
     resources: [
-      City, Building, BuildingImage, Apartment, ApartmentImage, User, Role, RefreshToken
+      City, Building, BuildingImage, Apartment, ApartmentImage, User, Role, RefreshToken, {
+        resource: News, options: {
+          properties: {
+            content: {
+              type: 'richtext',
+            }
+          },
+        },
+      }, NewsImages
     ],
     rootPath: "/admin",
   });
@@ -121,6 +126,14 @@ async function start() {
 // Build and use a router to handle AdminJS routes.
   const router = AdminJSExpress.buildRouter(adminJs, adminRouter);
   app.use(adminJs.options.rootPath, router);
+  app.use(formData.parse(options));
+  // delete from the request all empty files (size == 0)
+  app.use(formData.format());
+  // change the file objects to fs.ReadStream
+  app.use(formData.stream());
+  // union the body and the files
+  app.use(formData.union());
+
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
@@ -138,7 +151,8 @@ async function start() {
   } catch (e: any) {
     console.log(`server error ${e.message}`)
     process.exit(1)
-  };
+  }
+  ;
 };
 
 function initial() {

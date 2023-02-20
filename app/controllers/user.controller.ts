@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import RequestWithUserInterface from "../interfaces/requestWithUser.interface";
-import {User} from "../models/user.model";
+const {User} = require( "../models/user.model");
 
 exports.allAccess = (req: Request, res: Response) => {
   res.status(200).send("Public Content.");
