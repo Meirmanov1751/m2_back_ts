@@ -42,15 +42,6 @@ const options = {
   autoClean: true
 };
 
-
-app.use(formData.parse(options));
-// delete from the request all empty files (size == 0)
-app.use(formData.format());
-// change the file objects to fs.ReadStream
-app.use(formData.stream());
-// union the body and the files
-app.use(formData.union());
-
 app.use(cors());
 app.use(express.json())
 
@@ -105,12 +96,6 @@ watcher.on('ready', function() {
 async function start() {
   const adminJs = new AdminJS({
     resources: [
-<<<<<<<<< Temporary merge branch 1
-      City, Building, BuildingImage, Apartment, ApartmentImage,
-      User,
-      Role,
-      RefreshToken
-=========
       City, Building, BuildingImages, Apartment, ApartmentImages, User, Role, RefreshToken, {
         resource: News, options: {
           properties: {
@@ -126,7 +111,6 @@ async function start() {
           },
         },
       },NewsImages
->>>>>>>>> Temporary merge branch 2
     ],
     rootPath: "/admin",
   });
@@ -152,6 +136,15 @@ async function start() {
 // Build and use a router to handle AdminJS routes.
   const router = AdminJSExpress.buildRouter(adminJs, adminRouter);
   app.use(adminJs.options.rootPath, router);
+  app.use(formData.parse(options));
+// delete from the request all empty files (size == 0)
+  app.use(formData.format());
+// change the file objects to fs.ReadStream
+  app.use(formData.stream());
+// union the body and the files
+  app.use(formData.union());
+
+
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
